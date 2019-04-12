@@ -1,8 +1,12 @@
 package me.hellozin.demospringmvc;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
+import org.springframework.http.CacheControl;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -15,4 +19,22 @@ public class WebConfig implements WebMvcConfigurer {
 //        /* registry.addConverter(); 조금 더 generic 한 경우 */
 //    }
 
+    /* Interceptor 추가 */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new GreetingInterceptor())
+                .addPathPatterns("/hello")
+                .order(-1)
+        ;
+    }
+
+    /* Resource Handler 추가 */
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/sample/**")
+                .addResourceLocations("classpath:/sample/")
+                .setCacheControl(CacheControl.maxAge(3, TimeUnit.MINUTES))
+        ;
+    }
 }
