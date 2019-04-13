@@ -67,6 +67,8 @@ public class SampleControllerTest {
                     .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value("100"))
+                .andExpect(jsonPath("name").value("hellozin"))
         ;
     }
 }
