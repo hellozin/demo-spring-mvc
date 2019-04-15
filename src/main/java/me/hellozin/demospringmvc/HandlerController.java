@@ -6,7 +6,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class HandlerController {
@@ -28,16 +29,34 @@ public class HandlerController {
     }
 
     @PostMapping("/events")
-    @ResponseBody
 //    public Event getEventWithParam(@RequestParam(required = false, defaultValue = "hello") String name) {
-    public Event getEventWithParam(@Validated(Event.ValidateLimit.class) /* Group 지정 가능, 필수 아님 */
-                                       @ModelAttribute Event event, BindingResult bindingResult) {
+    public String getEventWithParam(
+            @Validated
+//            @Validated(Event.ValidateLimit.class) /* Group 지정 가능, 필수 아님 */
+            @ModelAttribute Event event,
+            BindingResult bindingResult,
+            Model model) {
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(c-> System.out.println(c.toString()));
+            return "/events/form";
+//            bindingResult.getAllErrors().forEach(c-> System.out.println(c.toString()));
         } /* Binding Error를 가져와 준다. */
-        return event;
+
+        List<Event> eventList = new ArrayList<>();
+        eventList.add(event);
+        model.addAttribute("eventList", eventList);
+
+        return "redirect:/events/list";
     }
 
-
+    @GetMapping("/events/list")
+    public String getEvents(Model model) {
+        Event event = new Event();
+        event.setName("sample");
+        event.setLimit(10);
+        List<Event> eventList = new ArrayList<>();
+        eventList.add(event);
+        model.addAttribute("eventList", eventList);
+        return "/events/list";
+    }
 
 }

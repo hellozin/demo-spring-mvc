@@ -10,10 +10,10 @@ public class Event {
 
     private Integer id;
 
-    @NotBlank(groups = ValidateName.class)
+    @NotBlank
     private String name;
 
-    @Min(value = 0, groups = ValidateLimit.class)
+    @Min(0)
     private Integer limit;
 
     public Integer getId() {
