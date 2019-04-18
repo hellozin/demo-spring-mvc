@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,12 @@ public class HandlerController {
         return "events/form";
     }
 
-    @GetMapping("/events/{id}")
+    @GetMapping("/events")
     @ResponseBody
-    public Event getEvent(@PathVariable Integer id) {
+    public String getEvent(@RequestParam Integer id) {
         Event event = new Event();
         event.setId(id);
-        return event;
+        return event.getId().toString();
     }
 
     @PostMapping("/events")
@@ -35,17 +36,21 @@ public class HandlerController {
 //            @Validated(Event.ValidateLimit.class) /* Group 지정 가능, 필수 아님 */
             @ModelAttribute Event event,
             BindingResult bindingResult,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "/events/form";
 //            bindingResult.getAllErrors().forEach(c-> System.out.println(c.toString()));
         } /* Binding Error를 가져와 준다. */
 
+        event.setId(1);
         List<Event> eventList = new ArrayList<>();
         eventList.add(event);
         model.addAttribute("eventList", eventList);
 
-        return "redirect:/events/list";
+        redirectAttributes.addAttribute("id", event.getId());
+
+        return "redirect:/events";
     }
 
     @GetMapping("/events/list")
