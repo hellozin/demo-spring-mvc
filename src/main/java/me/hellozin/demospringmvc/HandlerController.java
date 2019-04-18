@@ -23,10 +23,9 @@ public class HandlerController {
 
     @GetMapping("/events")
     @ResponseBody
-    public String getEvent(@RequestParam Integer id) {
-        Event event = new Event();
-        event.setId(id);
-        return event.getId().toString();
+    public String getEvent(Model model) {
+        Event event = (Event) model.asMap().get("newEvent");
+        return event.toString();
     }
 
     @PostMapping("/events")
@@ -48,7 +47,7 @@ public class HandlerController {
         eventList.add(event);
         model.addAttribute("eventList", eventList);
 
-        redirectAttributes.addAttribute("id", event.getId());
+        redirectAttributes.addFlashAttribute("newEvent", event);
 
         return "redirect:/events";
     }
