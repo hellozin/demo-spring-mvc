@@ -1,23 +1,28 @@
 package me.hellozin.demospringmvc;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@SessionAttributes("visitor")
+@SessionAttributes({"visitor","message"})
 public class SessionController {
 
-    private int count = 0;
+    @GetMapping("/login")
+    public String loginForm(Visitor visitor, String message) {
+        return "login";
+    }
 
-    @GetMapping("/session")
-    public String cookie(Model model) {
-        if (!model.containsAttribute("visitor")) {
-            String visitor = "hellozin" + (count++);
-            model.addAttribute("visitor", visitor);
-        }
-        return "session";
+    @PostMapping("/login")
+    public String login(Visitor visitor) {
+        return "redirect:/main";
+    }
+
+    @GetMapping("/main")
+    public String main() {
+        return "main";
     }
 
 }
