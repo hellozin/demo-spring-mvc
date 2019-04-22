@@ -24,4 +24,16 @@ public class Account {
     @Transient
     private String notColumnMapping;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "home_street"))
+    })
+    private Address homeAddress;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "office_street"))
+    })
+    private Address officeAddress;
+
 }
