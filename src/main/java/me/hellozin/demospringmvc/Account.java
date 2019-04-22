@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -30,10 +32,11 @@ public class Account {
     })
     private Address homeAddress;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "street", column = @Column(name = "office_street"))
-    })
-    private Address officeAddress;
+    @OneToMany(mappedBy = "owner")
+    private Set<Study> studies = new HashSet<>();
 
+    public void addStudy(Study study) {
+        this.getStudies().add(study);
+        study.setOwner(this);
+    }
 }

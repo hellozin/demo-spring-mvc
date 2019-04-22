@@ -16,7 +16,7 @@ public class JpaRunner implements ApplicationRunner {
     @PersistenceContext
     EntityManager entityManager; /* JPA 의 핵심 */
 
-//    @Transactional
+//    @Transactional /* 이건 왜 쓰지? */
 //    @Override
 //    public void run(ApplicationArguments args) throws Exception {
 //        Account account = new Account();
@@ -30,6 +30,14 @@ public class JpaRunner implements ApplicationRunner {
         Account account = new Account();
         account.setUsername("hellozin");
         account.setPassword("jpa");
+
+        Study study = new Study();
+        study.setName("Spring Data JPA");
+
+//        account.getStudies().add(study);
+//        study.setOwner(account);
+        account.addStudy(study);    // 일반적인 사용법
+
         Session session = entityManager.unwrap(Session.class);
         session.save(account);
     }
