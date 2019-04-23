@@ -27,28 +27,22 @@ public class JpaRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        /* Transient 상태: JPA가 모르는 상태 */
-        Account account = new Account();
-        account.setUsername("hellozin");
-        account.setPassword("jpa");
+        Post post = new Post();
+        post.setTitle("Spring Data JPA");
 
-        Study study = new Study();
-        study.setName("Spring Data JPA");
-        /**/
+        Comment comment = new Comment();
+        comment.setComment("soon");
+        post.addComment(comment);
 
-
-//        account.getStudies().add(study);
-//        study.setOwner(account);
-        account.addStudy(study);    // 일반적인 사용법
+        Comment comment1 = new Comment();
+        comment1.setComment("me too");
+        post.addComment(comment1);
 
         Session session = entityManager.unwrap(Session.class);
-        session.save(account); /* Persistent 상태: JPA가 관리중인 상태, 바로 DB에 들어가는 것은 아님 */
-        session.save(study);
+        session.save(post);
+        Post getpost = session.get(Post.class, 1l);
+        session.remove(getpost);
 
-        Account hellozin = session.load(Account.class, account.getId());
-        /* Persistent 상태에 해주는 일 중 1개: 1차 캐시, hellozin 은 select 쿼리가 발생하지 않는다.*/
-        hellozin.setUsername("hellozun"); /* 불필요한 select 하지 않고 update, Dirty Checking, Write Behind*/
-        hellozin.setUsername("hellozin"); /* 이러면 update 도 이루어지지 않음 */
     }
 
 }
