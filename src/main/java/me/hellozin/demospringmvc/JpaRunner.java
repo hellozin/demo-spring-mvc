@@ -19,15 +19,8 @@ public class JpaRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        /* Database 에 독립적 */
-        Post post = new Post();
-        post.setTitle("JPA");
-        entityManager.persist(post);
-
-        TypedQuery<Post> query = entityManager.createQuery("SELECT p FROM Post AS p", Post.class);
-        List<Post> posts = query.getResultList();
+        List<Post> posts = entityManager.createNativeQuery("Select * from Post", Post.class).getResultList();
         posts.forEach(System.out::println);
-        
     }
 
 }
