@@ -2,10 +2,7 @@ package me.hellozin.demospringmvc;
 
 import lombok.extern.java.Log;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Comment {
@@ -15,7 +12,8 @@ public class Comment {
 
     private String comment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    /* 기본값은 바로 엔티티 정보를 가져온다.*/
     private Post post;
 
     public String getComment() {
